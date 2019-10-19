@@ -46,6 +46,13 @@
     path: ~/minecraft/
     state: directory
 
+## copy run.sh into the new directory
+- name: move run.sh
+  copy:
+    src: run.sh
+    dest: ~/minecraft/
+    mode: u+x
+
 ## Ensure the the latest version of Minecraft Server is present
 - name: Download minecraft ({{ mc_version_str }})
   get_url:
@@ -95,9 +102,14 @@
   when: stat_result.stat.exists == False
   block:
 
+      - name: move eula.txt into minecraft dir
+        copy:
+                src: eula.txt
+                dest: ~/minecraft/
+
       ## Start thet server for the first time
       - name: Start minecraft for the first time
-        command: "java -Xmx1024M -Xms1024M -jar ~/minecraft/minecraft_server.jar nogui"
+        command: "screen -S minecraft -d -m ~/minecraft/run.sh"
 
       ## Pause for 2 minutes so the game can launch for the first time
       - name: Pause for 1 minute
