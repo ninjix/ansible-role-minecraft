@@ -21,6 +21,7 @@
           state: present
 
 - name: Setup fail2ban (ssh protection)
+  become: yes
   block:
       - name: Copy fail2ban
         copy:
