@@ -50,7 +50,7 @@
 - name: Get eula.txt set to true
   copy:
     dest: ~/minecraft/
-    src: files/eula.txt
+    src: eula.txt
     force: yes
 
 ## Ensure the the latest version of Minecraft Server is present
