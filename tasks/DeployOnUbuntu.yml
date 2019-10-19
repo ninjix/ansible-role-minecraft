@@ -46,13 +46,6 @@
     path: ~/minecraft/
     state: directory
 
-## Ensure the License Agreement is available for Minecraft Server
-- name: Get eula.txt set to true
-  copy:
-    dest: ~/minecraft/
-    src: eula.txt
-    force: yes
-
 ## Ensure the the latest version of Minecraft Server is present
 - name: Download minecraft ({{ mc_version_str }})
   get_url:
@@ -61,11 +54,12 @@
 
 - name: Test to see if java is running
   command: pgrep java
-    register: iamrun
+  register: iamrun
+  ignore_errors: yes
 
 - name: Only if minecraft server is already running
+  when: iamrun.rc == 0
   block:
-  when: iamrun.rc != 0
 
       ## Tell players that the world is about to go through a backup & restart
       - name: Signal the Minecraft Sever is about to get bounced
@@ -90,6 +84,37 @@
       path: ~/minecraft/  # contains minecraft files
       dest: /tmp/minecraft_backup/minecraft_backup_{{ ansible_date_time.date }}.tar.gz # create a tar (one file) gz (compressed) with the date
       remove: no # IMPORTANT! Always set to NO!!! Otherwise, the original data will be destroyed!!
+
+## Minecraft will not run in screen on the first launch, but be run natively
+- name: Check that minecraft has been run atleast once
+  stat:
+    path: ~/minecraft/server.properties
+  register: stat_result
+
+- name: Start minecraft (not in screen) the first time
+  when: stat_result.stat.exists == False
+  block:
+
+      ## Start thet server for the first time
+      - name: Start minecraft for the first time
+        command: "java -Xmx1024M -Xms1024M -jar ~/minecraft/minecraft_server.jar nogui"
+
+      ## Pause for 2 minutes so the game can launch for the first time
+      - name: Pause for 1 minute
+        pause: minutes=1
+
+      - name: replace busted eula.txt
+        replace:
+            path: ~/minecraft/eula.txt
+            regexp: '^eula=false'
+            replace: 'eula=true'
+
+      ## Start thet server for the first time
+      - name: Start minecraft for the first time
+        shell: "java -Xmx1024M -Xms1024M -jar ~/minecraft/minecraft_server.jar nogui"
+
+      - name: stop the server
+        shell: "/stop \n"
 
 ## Ensure the world is running
 - name: "Start the minecraft {{ mc_version }} server if needed"

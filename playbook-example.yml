@@ -3,4 +3,4 @@
   hosts: minecraft
 
   roles:
-          - ansible-minecraft
+          - ansible-role-minecraft
