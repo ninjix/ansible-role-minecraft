@@ -1,7 +1,7 @@
 Role Name
 =========
 
-This role deploys a minecraft server on Ubuntu linux.
+This role deploys a minecraft server on Debian based system (Debian and Ubuntu).
 
 Requirements
 ------------
