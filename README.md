@@ -16,12 +16,18 @@ The role will install some additional apps to help support running the mcserver,
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+The only variables that need defined are found in vars/main.yml, they are as follows:
+    - 
+      # avail at https://minecraft.net/en-us/download/server/
+      mc_version: 'https://launcher.mojang.com/v1/objects/3dc3d84a581f14691199cf6831b71ed1296a9fdf/server.jar'
+    -
+      # This should reflect the current version of the Minecraft server
+      mc_version_str: "1.14.1"
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+This role has no other role dependencies.
 
 Example Playbook
 ----------------
@@ -48,7 +54,7 @@ If you want to run the playbook against the local host (where ansible is install
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
