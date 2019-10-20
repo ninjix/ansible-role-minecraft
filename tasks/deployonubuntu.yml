@@ -59,10 +59,12 @@
     url: "{{ mc_version }}"
     dest: ~/minecraft/minecraft_server.jar
 
+## this tasks will indicate a change if the server software is NOT running
 - name: Test to see if java is running
   command: pgrep java
   register: iamrun
   ignore_errors: yes
+  changed_when: iamrun.rc != 0
 
 - name: Only if minecraft server is already running
   when: iamrun.rc == 0
@@ -70,7 +72,9 @@
 
       ## Tell players that the world is about to go through a backup & restart
       - name: Signal the Minecraft Sever is about to get bounced
-        command: "screen -S minecraft -X stuff 'say The world shall be made safe for another day. To do so. We must momentarily hault the world. Sever restart in 1 minute. \n /save-off \n /save-all \n /save-on \n'"
+        command: "screen -S minecraft -X stuff 'say The world shall be made safe for another day.
+                  We must momentarily hault the world. 
+                  Sever restart in 1 minute. \n /save-off \n /save-all \n /save-on \n'"
 
       ## Pause for 1 minute so players can disconnect from the game
       - name: Pause for 1 minute
