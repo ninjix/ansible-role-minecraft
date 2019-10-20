@@ -5,11 +5,11 @@
   become: yes
   block:
 
-      - name: Update apt with latest 
+      - name: Update apt with latest
         apt:
           upgrade: dist
           update_cache: yes
-       
+
       - name: Install additional apps via apt
         apt:
           name:
@@ -34,7 +34,7 @@
           dest: /etc/fail2ban/jail.local
           regexp: "^bantime  = 600$"
           line: "bantime  = 20000"
-        
+
       - name: Restart fail2ban
         service:
           name: fail2ban
@@ -56,7 +56,7 @@
 ## Ensure the the latest version of Minecraft Server is present
 - name: Download minecraft ({{ mc_version_str }})
   get_url:
-    url: "{{mc_version}}"
+    url: "{{ mc_version }}"
     dest: ~/minecraft/minecraft_server.jar
 
 - name: Test to see if java is running
@@ -80,7 +80,7 @@
       - name: Turn off the server so the tar file can be built without errors
         command: "screen -S minecraft -X stuff '/stop \n'"
 
-## Ensure that a backup directory exists on the Minecraft Server 
+## Ensure that a backup directory exists on the Minecraft Server
 - name: Make minecraft_backup directory
   file:
     path: /tmp/minecraft_backup
