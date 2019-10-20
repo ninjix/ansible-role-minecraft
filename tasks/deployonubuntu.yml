@@ -145,6 +145,8 @@
 ## Ensure the world is running
 - name: "Start the minecraft {{ mc_version }} server if needed"
   command: "chdir=~/minecraft/ screen -S minecraft -d -m ~/minecraft/run.sh"
+  register: result
+  changed_when: result.rc == 0
 
 ## allow the server 2 minutes to boot
 - name: pause for 80 seconds for mc server to fully boot
@@ -153,3 +155,4 @@
 ## Let the world know that the world has been saved!
 - name: Signal the Minecraft Sever has been backed up
   command: "screen -S minecraft -X stuff '/say Backups have been completed. Entaro Adun. \n'"
+  changed_when: result.rc == 0
