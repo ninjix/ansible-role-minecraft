@@ -73,7 +73,7 @@
       ## Tell players that the world is about to go through a backup & restart
       - name: Signal the Minecraft Sever is about to get bounced
         command: "screen -S minecraft -X stuff 'say The world shall be made safe for another day.
-                  We must momentarily hault the world. 
+                  We must momentarily hault the world.
                   Sever restart in 1 minute. \n /save-off \n /save-all \n /save-on \n'"
 
       ## Pause for 1 minute so players can disconnect from the game
@@ -97,7 +97,7 @@
   register: stat_result
 
 - name: Backup mc server if this is not the first run
-  when: stat_result.stat.exists == True
+  when: stat_result.stat.exists
   block:
 
       - name: Compress minecraft files
@@ -107,7 +107,7 @@
             remove: no # IMPORTANT! Always set to NO!!! Otherwise, the original data will be destroyed!!
 
 - name: Start minecraft (not in screen) the first time
-  when: stat_result.stat.exists == False
+  when: not stat_result.stat.exists
   block:
 
       - name: move eula.txt into minecraft dir
@@ -135,10 +135,6 @@
 
       - name: Pause for 80 seconds for mc server to fully boot
         pause: seconds=80
-
-            #      ## Start thet server for the first time
-      #      - name: Start minecraft for the first time
-        #        shell: "java -Xmx1024M -Xms1024M -jar ~/minecraft/minecraft_server.jar nogui"
 
       - name: stop the server
         command: "chdir=~/minecraft/ screen -S minecraft -d -m /stop \n"
