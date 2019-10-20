@@ -1,7 +1,11 @@
 Role Name
 =========
 
-This role deploys a minecraft server on Debian based system (Debian and Ubuntu).
+ansible-role-minecraft:
+
+    - This role deploys a minecraft server on Debian based system (Debian and Ubuntu).
+    - If you have run the role previously, it will STOP the server software, backup the world to /tmp/minecraft_backup/ with the current date, then START the software
+    - This role runs the minecraft server software in a screen session titled "minecraft"
 
 Requirements
 ------------
@@ -77,3 +81,4 @@ Available for:
     - 4G LTE
     - IP Multimedia Subsystem
     - Session Initiation Protocol
+    - Playing Minecraft and StarCraft II :p
